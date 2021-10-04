@@ -63,7 +63,7 @@ class Conv2d_tf(nn.Conv2d):
         )
 
 
-class SEEncoder(nn.Module):
+class SEEncoder(nn.Module): # TODO (sjha) : figure out where this is used
     """Convolutional encoder of pixels observations."""
     def __init__(self, obs_shape):
         super().__init__()
@@ -296,7 +296,7 @@ class DRQLAgent(object):
                 max_Q_actions = np.argmax(critic_Q_values, axis=1)
 
                 # Get next_Q using the target network's Q values and the critic's selected actions
-                next_Q = self.critic_target(next_obs, use_aug=True)
+                next_Q = self.critic_target(next_obs, use_aug=True) # TODO: After adding DrQ, figure out if use_aug should be True here
                 next_Q = np.expand_dims(
                     next_Q[np.arange(0,next_Q.shape[0]), max_Q_actions],
                     axis=1) # TODO: (sjha) ensure this works correctly
