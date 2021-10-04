@@ -32,9 +32,7 @@ class eval_mode(object):
 
 def soft_update_params(net, target_net, tau):
     for param, target_param in zip(net.parameters(), target_net.parameters()):
-        # TODO double Q learning: write the soft update from net to target_net
-        pass
-        # End TODO
+        target_param.data.copy_(tau * param + (1 - tau) * target_param)
 
 
 def set_seed_everywhere(seed):

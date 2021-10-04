@@ -293,12 +293,17 @@ class DRQLAgent(object):
         with torch.no_grad():
             discount = self.discount**self.multistep_return
             if self.double_q:
-                # TODO double Q learning
-                # Find the target Q value based on the critic
-                # and the critic target networks to find the right
-                # value of target_Q
-                target_Q = None
-                # End TODO
+                # Select actions according to the critic's Q-values
+                critic_Q_values = self.critic(next_obs, use_aug=True)
+                max_Q_actions = np.argmax(critic_Q_values, axis=1)
+
+                # Get next_Q using the target network's Q values and the critic's selected actions
+                next_Q = self.critic_target(next_obs, use_aug=True)
+                next_Q = np.expand_dims(
+                    next_Q[np.arange(0,next_Q.shape[0]), max_Q_actions],
+                    axis=1) # TODO: (sjha) ensure this works correctly
+
+                target_Q = reward + (not_done * discount * next_Q) # TODO: (sjha) Check the shape of next_Q
             else:
                 next_Q = self.critic_target(next_obs, use_aug=True)
                 next_Q = next_Q.max(dim=1)[0].unsqueeze(1)
@@ -355,5 +360,5 @@ class DRQLAgent(object):
             # End TODO
 
         if step % self.critic_target_update_frequency == 0:
-            utils.soft_update_params(self.critic, self.critic_target,
+            utils.soft_update_params(self.critic, self.critic_target, # TODO: (sjha) Figure out what this is
                                      self.critic_tau)
