@@ -12,5 +12,5 @@
 singularity exec --nv --overlay $SCRATCH/drl_hw2_overlay.ext3:ro /scratch/work/public/singularity/cuda10.1-cudnn7-devel-ubuntu18.04-20201207.sif /bin/bash -c "
 source /ext3/miniconda3/bin/activate
 conda activate hw2_drq
-python ./train.py
-"g
+python /scratch/sj3549/dqn_experiments/train.py
+"
