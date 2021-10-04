@@ -198,10 +198,10 @@ class Critic(nn.Module):
         self.num_actions = num_actions
 
         if dueling:
-            # TODO dueling DQN, define the value and the advantage network
-            self.V = None
-            self.A = None
-            # END TODO
+            self.V = utils.mlp(self.encoder.feature_dim, hidden_dim,
+                               1, hidden_depth)
+            self.A = utils.mlp(self.encoder.feature_dim, hidden_dim,
+                               num_actions, hidden_depth)
         else:
             self.Q = utils.mlp(self.encoder.feature_dim, hidden_dim,
                                num_actions, hidden_depth)
@@ -216,11 +216,9 @@ class Critic(nn.Module):
         obs = self.encoder(obs)
 
         if self.dueling:
-            # TODO dueling DQN, compute the q value from the value and advantage network
-            v = None
-            a = None
-            q = None
-            # END TODO
+            v = self.V(obs)
+            a = self.A(obs)
+            q = v + (a - torch.mean(a, 1, True))
         else:
             q = self.Q(obs)
 

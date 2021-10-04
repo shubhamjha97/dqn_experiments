@@ -74,8 +74,10 @@ critic:
     num_actions: ${agent.params.num_actions}
     hidden_dim: 512
     hidden_depth: ${hidden_depth}
-    # TODO dueling DQN fix this
-    dueling: false
+
+    # Dueling DQN
+    dueling: true
+
     aug_type: ${aug_type}
     image_pad: ${image_pad}
     intensity_scale: ${intensity_scale}
