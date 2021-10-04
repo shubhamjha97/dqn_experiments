@@ -355,10 +355,9 @@ class DRQLAgent(object):
                                        weights, logger, step)
 
         if prioritized_replay:
-            # TODO prioritized replay buffer: update the priorities in the replay buffer using td_errors
-            pass
-            # End TODO
+            abs_td_errors = np.abs(td_errors) # Ensure td-errors are positive
+            replay_buffer.update_priorities(idxs, abs_td_errors)
 
         if step % self.critic_target_update_frequency == 0:
-            utils.soft_update_params(self.critic, self.critic_target, # TODO: (sjha) Figure out what this is
+            utils.soft_update_params(self.critic, self.critic_target,
                                      self.critic_tau)

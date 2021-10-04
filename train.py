@@ -44,9 +44,10 @@ class Workspace(object):
         self.agent = hydra.utils.instantiate(cfg.agent)
 
         if cfg.prioritized_replay:
-            # TODO: Initialize the prioritized replay buffer
-            pass
-            # End TODO
+            self.replay_buffer = PrioritizedReplayBuffer(self.env.observation_space.shape,
+                                              cfg.replay_buffer_capacity,
+                                              self.cfg.prioritized_replay_alpha,
+                                              self.device)
         else:
             self.replay_buffer = ReplayBuffer(self.env.observation_space.shape,
                                               cfg.replay_buffer_capacity,

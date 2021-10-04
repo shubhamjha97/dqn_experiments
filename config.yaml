@@ -9,8 +9,10 @@ num_exploration_steps: 5000 # 50000
 start_training_steps: 1600
 min_eps: 0.1
 replay_buffer_capacity: ${num_train_steps}
-# TODO prioritized replay buffer change this
-prioritized_replay: false
+
+# Prioritized replay
+prioritized_replay: true
+
 prioritized_replay_alpha: 0.6
 seed: 1
 # eval
@@ -58,8 +60,10 @@ agent:
     batch_size: ${batch_size}
     multistep_return: 10
     eval_eps: 0.05
-    # TODO double Q learning: fix this
+
+    # Double Q-Learning
     double_q: true
+
     prioritized_replay_beta0: 0.4
     prioritized_replay_beta_steps: ${num_train_steps}
 
