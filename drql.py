@@ -293,15 +293,15 @@ class DRQLAgent(object):
             if self.double_q:
                 # Select actions according to the critic's Q-values
                 critic_Q_values = self.critic(next_obs, use_aug=True)
-                max_Q_actions = np.argmax(critic_Q_values, axis=1)
+                max_Q_actions = torch.argmax(critic_Q_values, dim=1)
 
                 # Get next_Q using the target network's Q values and the critic's selected actions
                 next_Q = self.critic_target(next_obs, use_aug=True) # TODO: After adding DrQ, figure out if use_aug should be True here
                 next_Q = np.expand_dims(
                     next_Q[np.arange(0,next_Q.shape[0]), max_Q_actions],
-                    axis=1) # TODO: (sjha) ensure this works correctly
+                    axis=1)
 
-                target_Q = reward + (not_done * discount * next_Q) # TODO: (sjha) Check the shape of next_Q
+                target_Q = reward + (not_done * discount * next_Q)
             else:
                 next_Q = self.critic_target(next_obs, use_aug=True)
                 next_Q = next_Q.max(dim=1)[0].unsqueeze(1)
