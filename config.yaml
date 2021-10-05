@@ -11,7 +11,7 @@ min_eps: 0.1
 replay_buffer_capacity: ${num_train_steps}
 
 # Prioritized replay
-prioritized_replay: true
+prioritized_replay: false
 
 prioritized_replay_alpha: 0.6
 seed: 1
@@ -76,7 +76,7 @@ critic:
     hidden_depth: ${hidden_depth}
 
     # Dueling DQN
-    dueling: true
+    dueling: false
 
     aug_type: ${aug_type}
     image_pad: ${image_pad}
