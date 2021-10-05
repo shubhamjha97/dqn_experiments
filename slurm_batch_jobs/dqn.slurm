@@ -4,7 +4,7 @@
 #SBATCH --output=./%x_%j.out
 #SBATCH --error=./%x_%j.err
 #SBATCH --export=ALL
-#SBATCH --time=00:10:00
+#SBATCH --time=5-00:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --mem=64G
 #SBATCH -c 4
