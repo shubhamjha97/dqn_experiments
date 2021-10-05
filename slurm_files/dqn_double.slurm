@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --job-name=dqn_double
 #SBATCH --open-mode=append
-#SBATCH --output=./%j_%x.out
-#SBATCH --error=./%j_%x.err
+#SBATCH --output=./dqn_double_%j_%x.out
+#SBATCH --error=./dqn_double_%j_%x.err
 #SBATCH --export=ALL
 #SBATCH --time=00:10:00
 #SBATCH --gres=gpu:1
