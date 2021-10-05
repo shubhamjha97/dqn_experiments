@@ -297,9 +297,9 @@ class DRQLAgent(object):
 
                 # Get next_Q using the target network's Q values and the critic's selected actions
                 next_Q = self.critic_target(next_obs, use_aug=True) # TODO: After adding DrQ, figure out if use_aug should be True here
-                next_Q = np.expand_dims(
+                next_Q = torch.unsqueeze(
                     next_Q[np.arange(0,next_Q.shape[0]), max_Q_actions],
-                    axis=1)
+                    dim=1)
 
                 target_Q = reward + (not_done * discount * next_Q)
             else:
