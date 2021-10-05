@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=dqn_double_prioritized_drq
 #SBATCH --open-mode=append
-#SBATCH --output=./dqn_double_prioritized_drq_%j_%x.out
+#SBATCH --output=./%x_%j.out
 #SBATCH --error=./dqn_double_prioritized_drq_%j_%x.err
 #SBATCH --export=ALL
 #SBATCH --time=00:10:00
@@ -13,5 +13,5 @@ singularity exec --nv --overlay $SCRATCH/drl_hw2_overlay.ext3:ro /scratch/work/p
 source /ext3/miniconda3/bin/activate
 conda activate hw2_drq
 # TODO: fix
-# python /scratch/sj3549/dqn_experiments/train.py 'agent.params.double_q=true' 'prioritized_replay=true' 'critic.params.dueling=false'
+# python -u /scratch/sj3549/dqn_experiments/train.py 'agent.params.double_q=true' 'prioritized_replay=true' 'critic.params.dueling=false'
 "
