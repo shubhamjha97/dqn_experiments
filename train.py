@@ -56,7 +56,7 @@ class Workspace(object):
         self.video_recorder = VideoRecorder(
             self.work_dir if cfg.save_video else None)
         self.train_video_recorder = TrainVideoRecorder(
-            self.work_dir if cfg.save_video else None,
+            self.work_dir if cfg.save_train_video else None,
             self.agent.critic.aug_trans)
         self.step = 0
 
