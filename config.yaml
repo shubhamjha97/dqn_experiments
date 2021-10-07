@@ -3,7 +3,7 @@ env: Breakout
 # see section 4.1 in https://arxiv.org/pdf/1812.06110.pdf
 terminal_on_life_loss: true
 # train
-num_train_steps: 100001
+num_train_steps: 300001
 num_train_iters: 1
 num_exploration_steps: 10000 # 50000
 start_training_steps: 1600
@@ -16,8 +16,8 @@ prioritized_replay: false
 prioritized_replay_alpha: 0.6
 seed: 1
 # eval
-eval_frequency: 100000
-num_eval_steps: 125000
+eval_frequency: 10000
+num_eval_steps: 20000
 # misc
 log_frequency_step: 10000
 log_save_tb: true
