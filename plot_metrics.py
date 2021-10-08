@@ -67,6 +67,9 @@ def plot_data(runs, OUT_DIR):
         ax.plot(steps, rewards, label=get_label_from_metadata(run['metadata']))
 
     for env, (plt, ax) in envs.items():
+        ax.set_title("Performance on "  + env)
+        ax.set_xlabel("training steps")
+        ax.set_ylabel("eval reward")
         ax.legend(loc='upper left', prop={'size': 6})
         ax.grid(which='both')
         plt.savefig(os.path.join(OUT_DIR, env + ".png"), dpi=300)
