@@ -11,6 +11,7 @@ import kornia
 
 from replay_buffer import PrioritizedReplayBuffer
 
+VERY_SMALL_CONSTANT = 1e-8
 
 # from
 # https://github.com/mlperf/inference/blob/master/others/edge/object_detection/ssd_mobilenet/pytorch/utils.py#L40
@@ -359,8 +360,8 @@ class DRQLAgent(object):
                                        weights, logger, step)
 
         if prioritized_replay:
-            abs_td_errors = np.abs(td_errors) # Ensure td-errors are positive
-            replay_buffer.update_priorities(idxs, abs_td_errors)
+            priorities = np.abs(td_errors) + VERY_SMALL_CONSTANT # Ensure td-errors are greater than zero
+            replay_buffer.update_priorities(idxs, priorities)
 
         if step % self.critic_target_update_frequency == 0:
             utils.soft_update_params(self.critic, self.critic_target,
