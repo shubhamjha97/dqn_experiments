@@ -319,7 +319,7 @@ class DRQLAgent(object):
         # get current Q estimates
         obs = obs.repeat(self.drq_m, 1, 1, 1) # DrQ
         current_Q = self.critic(obs, use_aug=True)
-        action = action.repeat(2, 1) # DrQ
+        action = action.repeat(self.drq_m, 1) # DrQ
         current_Q = current_Q.gather(1, action)
 
         td_errors = current_Q - target_Q
