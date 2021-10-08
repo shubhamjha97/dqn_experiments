@@ -62,8 +62,8 @@ agent:
     eval_eps: 0.05
 
     # DrQ
-    drq_k: 2
-    drq_m: 2
+    drq_k: 1
+    drq_m: 1
 
     # Double Q-Learning
     double_q: true

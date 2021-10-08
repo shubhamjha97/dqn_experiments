@@ -12,9 +12,8 @@
 singularity exec --nv --overlay $SCRATCH/drl_hw2_overlay.ext3:ro /scratch/work/public/singularity/cuda10.1-cudnn7-devel-ubuntu18.04-20201207.sif /bin/bash -c "
 source /ext3/miniconda3/bin/activate
 conda activate hw2_drq
-# TODO: fix
-# python -u /scratch/sj3549/dqn_experiments/train.py 'agent.params.double_q=true' 'prioritized_replay=true' 'critic.params.dueling=false' 'env=Breakout' &
-# python -u /scratch/sj3549/dqn_experiments/train.py 'agent.params.double_q=true' 'prioritized_replay=true' 'critic.params.dueling=false' 'env=Pong' &
-# python -u /scratch/sj3549/dqn_experiments/train.py 'agent.params.double_q=true' 'prioritized_replay=true' 'critic.params.dueling=false' 'env=SpaceInvaders' &
+python -u /scratch/sj3549/dqn_experiments/train.py 'agent.params.double_q=true' 'prioritized_replay=false' 'critic.params.dueling=true' 'agent.params.drq_k=2' 'agent.params.drq_m=2' 'env=Breakout' &
+python -u /scratch/sj3549/dqn_experiments/train.py 'agent.params.double_q=true' 'prioritized_replay=false' 'critic.params.dueling=true' 'agent.params.drq_k=2' 'agent.params.drq_m=2' 'env=Pong' &
+python -u /scratch/sj3549/dqn_experiments/train.py 'agent.params.double_q=true' 'prioritized_replay=false' 'critic.params.dueling=true' 'agent.params.drq_k=2' 'agent.params.drq_m=2' 'env=SpaceInvaders' &
 wait
 "
