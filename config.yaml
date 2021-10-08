@@ -61,6 +61,10 @@ agent:
     multistep_return: 10
     eval_eps: 0.05
 
+    # DrQ
+    drq_k: 1
+    drq_m: 1
+
     # Double Q-Learning
     double_q: true
 

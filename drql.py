@@ -244,7 +244,8 @@ class DRQLAgent(object):
                  discount, lr, beta_1, beta_2, weight_decay, adam_eps,
                  max_grad_norm, critic_tau, critic_target_update_frequency,
                  batch_size, multistep_return, eval_eps, double_q,
-                 prioritized_replay_beta0, prioritized_replay_beta_steps):
+                 prioritized_replay_beta0, prioritized_replay_beta_steps,
+                 drq_k, drq_m):
         self.device = device
         self.discount = discount
         self.critic_tau = critic_tau
@@ -259,6 +260,10 @@ class DRQLAgent(object):
         self.prioritized_replay_beta0 = prioritized_replay_beta0
         self.prioritized_replay_beta_steps = prioritized_replay_beta_steps
         self.eps = 0
+
+        # DrQ
+        self.drq_k = drq_k
+        self.drq_m = drq_m
 
         self.critic = hydra.utils.instantiate(critic_cfg).to(self.device)
         self.critic_target = hydra.utils.instantiate(critic_cfg).to(
@@ -296,18 +301,19 @@ class DRQLAgent(object):
                 max_Q_actions = torch.argmax(critic_Q_values, dim=1)
 
                 # Get next_Q using the target network's Q values and the critic's selected actions
+                
                 next_Q = self.critic_target(next_obs, use_aug=True) # TODO: After adding DrQ, figure out if use_aug should be True here
                 next_Q = torch.unsqueeze(
                     next_Q[np.arange(0,next_Q.shape[0]), max_Q_actions],
                     dim=1)
-
-                target_Q = reward + (not_done * discount * next_Q)
             else:
                 next_Q = self.critic_target(next_obs, use_aug=True)
                 next_Q = next_Q.max(dim=1)[0].unsqueeze(1)
-                target_Q = reward + (not_done * discount * next_Q)
+
+            target_Q = reward + (not_done * discount * next_Q)
 
         # get current Q estimates
+        obs = obs.repeat(self.drq_m, 1, 1, 1) # DrQ
         current_Q = self.critic(obs, use_aug=True)
         current_Q = current_Q.gather(1, action)
 
