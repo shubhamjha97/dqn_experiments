@@ -186,7 +186,7 @@ class Critic(nn.Module):
             'none':
             nn.Identity(),
             'all':
-            nn.Identity(), # TODO DrQ fix this line.
+            nn.Sequential(nn.ReplicationPad2d(4), kornia.augmentation.RandomCrop((84, 84))), # Random shift implementation
         }
 
         assert aug_type in AUGMENTATIONS.keys()
