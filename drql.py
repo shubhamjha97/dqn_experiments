@@ -312,10 +312,12 @@ class DRQLAgent(object):
                 next_Q = next_Q.max(dim=1)[0].unsqueeze(1)
 
             target_Q = reward + (not_done * discount * next_Q)
+            target_Q = target_Q.repeat(self.drq_m, 1) # DrQ
 
         # get current Q estimates
         obs = obs.repeat(self.drq_m, 1, 1, 1) # DrQ
         current_Q = self.critic(obs, use_aug=True)
+        action = action.repeat(2, 1) # DrQ
         current_Q = current_Q.gather(1, action)
 
         td_errors = current_Q - target_Q
