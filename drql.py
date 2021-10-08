@@ -295,6 +295,8 @@ class DRQLAgent(object):
     def update_critic(self, obs, action, reward, next_obs, not_done, weights,
                       logger, step):
         with torch.no_grad():
+            next_obs = next_obs.repeat(self.drq_k, 1, 1, 1) # DrQ
+
             discount = self.discount**self.multistep_return
             if self.double_q:
                 # Select actions according to the critic's Q-values
@@ -302,7 +304,6 @@ class DRQLAgent(object):
                 max_Q_actions = torch.argmax(critic_Q_values, dim=1)
 
                 # Get next_Q using the target network's Q values and the critic's selected actions
-                
                 next_Q = self.critic_target(next_obs, use_aug=True)
                 next_Q = torch.unsqueeze(
                     next_Q[np.arange(0,next_Q.shape[0]), max_Q_actions],
@@ -311,6 +312,7 @@ class DRQLAgent(object):
                 next_Q = self.critic_target(next_obs, use_aug=True)
                 next_Q = next_Q.max(dim=1)[0].unsqueeze(1)
 
+            next_Q = next_Q.reshape(self.drq_k, next_Q.shape[0]//self.drq_k, 1).mean(0) #DrQ
             target_Q = reward + (not_done * discount * next_Q)
             target_Q = target_Q.repeat(self.drq_m, 1) # DrQ
 
@@ -321,7 +323,12 @@ class DRQLAgent(object):
         current_Q = current_Q.gather(1, action)
 
         td_errors = current_Q - target_Q
+        # Band-aid fix. DrQ is not meant to be sued with Prioritized ER.
+        td_errors = td_errors.reshape(self.drq_m, td_errors.shape[0]//self.drq_m, 1).mean(0)
         critic_losses = F.smooth_l1_loss(current_Q, target_Q, reduction='none')
+
+        critic_losses = critic_losses.reshape(self.drq_m, critic_losses.shape[0]//self.drq_m, 1).mean(0) # DrQ
+
         if weights is not None:
             critic_losses *= weights
 
