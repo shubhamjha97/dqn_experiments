@@ -4,7 +4,7 @@
 #SBATCH --output=./%x_%j.out
 #SBATCH --error=./dqn_double_prioritized_drq_%j_%x.err
 #SBATCH --export=ALL
-#SBATCH --time=06:00:00
+#SBATCH --time=20:00:00
 #SBATCH --gres=gpu:1
 #SBATCH --mem=64G
 #SBATCH -c 8
