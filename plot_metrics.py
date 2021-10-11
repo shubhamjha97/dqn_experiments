@@ -49,7 +49,7 @@ def read_runs_metrics(run_root_dir):
 def get_label_from_metadata(metadata):
     algos = [k for k, v in metadata.items() if v.strip().lower() == 'true']
     if "drq_k" in metadata or "drq_m" in metadata:
-        algos.append("drq")
+        algos.append("drq_" + metadata["aug_type"])
     return '+'.join(algos) if algos else 'baseline_dqn'
 
 
